@@ -42,5 +42,9 @@ public class Pizza {
         this.price = price;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
     
 }

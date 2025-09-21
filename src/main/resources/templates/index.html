@@ -8,31 +8,57 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Page Title</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-    <script src='main.js'></script>
+    <link rel='stylesheet' type='text/css' media='screen' href='../static/css/style.css'>
+    <script src='../static/script/script.js'></script>
 </head>
 
 <body>
-    <table th:if="${pizzaList.size() > 0}" class="table table-striped">
-        <thead>
-            <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Description</th>
-                <th scope="col">Photo</th>
-                <th scope="col">Price</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="item : ${pizzaList}">
-                <th th:text="${item.name}" scope="row"></th>
-                <td th:text="${item.description}" ></td>
-                <td><img width="105px" height="75px" alt="pizzaImage" th:src="@{${item.photoUrl}}" /></td>
-                <td th:text="${item.price}"></td>
-            </tr>
-        </tbody>
-    </table>
+    <nav th:replace="~{navbar :: navbar('Pizzas')}"></nav>
+    <div class="container mt-5">
+        <div class="mb-3">
+            <form method="get" th:action="@{/pizzas/search}">
+                <div class="d-flex d-inline">
+                    <input name="keyword" type="search" class="form-control" placeholder="Search" aria-label="Search">
+                    <button type="submit" class="btn btn-outline-primary ms-3" value="Cerca"> <svg
+                            xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-search" viewBox="0 0 16 16">
+                            <path
+                                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                        </svg>
+                    </button>
+                </div>
+            </form>
+        </div>
 
-    <p th:unless="${pizzaList.size() > 0}"> Nessuna pizza nel nostro database</p>
+        <div class="table-responsive">
+            <table th:if="${pizzaList.size() > 0}" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Photo</th>
+                        <th scope="col">Price</th>
+                    </tr>
+                </thead>
+                <tbody id="pizzaTableBody">
+                    <tr th:each="item : ${pizzaList}">
+                        <th>
+                            <a th:href="@{/pizzas/{id}(id=${item.id})}">
+                                <span th:text="${item.name}"></span>
+                            </a>
+                        </th>
+                        <td th:text="${item.description}"></td>
+                        <td>
+                            <img width="105px" height="75px" alt="pizzaImage" th:src="@{${item.photoUrl}}" />
+                        </td>
+                        <td th:text="${item.price}"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p th:unless="${pizzaList.size() > 0}">Nessuna pizza nel nostro database</p>
+        </div>
+    </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
