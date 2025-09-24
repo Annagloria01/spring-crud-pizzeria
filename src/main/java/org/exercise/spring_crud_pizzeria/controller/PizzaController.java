@@ -12,13 +12,13 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.validation.Valid;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/")
@@ -79,5 +79,34 @@ public class PizzaController {
         redirectAttributes.addFlashAttribute("successMessage", "Pizza created successfully");
         return "redirect:/pizzas";
     }
+
+    @PostMapping("/pizzas/delete/{id}")
+    public String deleteById(@PathVariable Integer id) {
+        pizzaRepository.deleteById(id);
+        return "redirect:/pizzas";
+    }
+
+    @GetMapping("/pizzas/edit/{id}")
+    public String getPizzaToEdit(@PathVariable Integer id, Model model) {
+        Optional<Pizza> optPizza = pizzaRepository.findById(id);
+        if (optPizza.isPresent()) {
+            model.addAttribute("pizza", optPizza.get());
+            return "edit";
+        } else {
+            return "redirect:/pizzas";
+        }
+    }
+
+    @PostMapping("/pizzas/edit/{id}")
+    public String updatePizza(@PathVariable Integer id, @Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingResult, Model model) {
+        if(bindingResult.hasErrors()){
+            return "edit";
+        }
+
+        pizzaRepository.save(formPizza);
+        
+        return "redirect:/pizzas";
+    }
+    
 
 }

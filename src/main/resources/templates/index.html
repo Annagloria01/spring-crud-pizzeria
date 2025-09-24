@@ -59,7 +59,17 @@
                         <td>
                             <img width="105px" height="75px" alt="pizzaImage" th:src="@{${item.photoUrl}}" />
                         </td>
-                        <td th:text="${item.price}"></td>
+                        <td th:text="${item.price}" class="align-middle"></td>
+                        <td class="align-middle text-center">
+                            <form th:action="@{/pizzas/edit/{id}(id=${item.id})}" method="get">
+                                <button type="submit" class="btn btn-primary ms-1">Edit Pizza</button>
+                            </form>
+                        </td>
+                        <td class="align-middle text-center">
+                            <form th:action="@{/pizzas/delete/{id}(id=${item.id})}" method="post">
+                                <button type="submit" class="btn btn-danger">Delete Pizza</button>
+                            </form>
+                        </td>
                     </tr>
                 </tbody>
             </table>
